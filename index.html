@@ -544,6 +544,8 @@
   var ringSchedule = null, vibrateInterval = null;
   var callStart = null, callTimerInterval = null;
   var cueIndex = 0, cueLines = [], coachAdvanceTimer = null, coachToken = 0;
+  var coachAudio = new Audio(), coachPreloads = [];
+  coachAudio.preload = "auto";
   var current = null; // { callerId, callerLabel, sub, scriptId, confidence }
   var audioCtx = null;
   var log = [];
@@ -600,8 +602,26 @@
   function stopAudioCoach(){
     coachToken += 1;
     if(coachAdvanceTimer){ clearTimeout(coachAdvanceTimer); coachAdvanceTimer = null; }
+    coachAudio.onplay = null;
+    coachAudio.onended = null;
+    coachAudio.onerror = null;
+    coachAudio.pause();
+    coachAudio.removeAttribute("src");
     if("speechSynthesis" in window){ window.speechSynthesis.cancel(); }
     audioCoach.classList.remove("is-speaking");
+  }
+
+  function coachAudioPath(scriptId, lineNumber){
+    return "audio/" + scriptId + "-" + lineNumber + ".wav";
+  }
+
+  function preloadCoachAudio(scriptId){
+    coachPreloads = [1, 2, 3, 4].map(function(lineNumber){
+      var audio = new Audio(coachAudioPath(scriptId, lineNumber));
+      audio.preload = "auto";
+      audio.load();
+      return audio;
+    });
   }
 
   function getCoachVoice(){
@@ -616,6 +636,48 @@
     return Math.max(4800, Math.min(8500, words * 520 + 2200));
   }
 
+  function coachStarted(token, isExit){
+    if(token !== coachToken) return;
+    audioCoach.classList.add("is-speaking");
+    audioStatus.textContent = isExit ? "Listen to your exit line" : "Listen, then repeat";
+  }
+
+  function coachFinished(token, isExit, line){
+    if(token !== coachToken) return;
+    audioCoach.classList.remove("is-speaking");
+    audioStatus.textContent = isExit ? "Deliver the exit line" : "Your turn to repeat";
+    if(!isExit && state === "incall"){
+      coachAdvanceTimer = setTimeout(function(){
+        cueIndex += 1;
+        speakCurrentCue();
+      }, coachRepeatDelay(line));
+    }
+  }
+
+  function speakWithBrowserVoice(line, isExit, token){
+    if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
+      audioCoach.classList.remove("is-speaking");
+      audioStatus.textContent = "Tap Repeat to retry audio";
+      return;
+    }
+    window.speechSynthesis.cancel();
+    var utterance = new SpeechSynthesisUtterance((isExit ? "Exit line. " : "Your line. ") + line);
+    var voice = getCoachVoice();
+    if(voice) utterance.voice = voice;
+    utterance.lang = voice ? voice.lang : "en-SG";
+    utterance.rate = 0.86;
+    utterance.pitch = 0.96;
+    utterance.volume = 0.82;
+    utterance.onstart = function(){ coachStarted(token, isExit); };
+    utterance.onend = function(){ coachFinished(token, isExit, line); };
+    utterance.onerror = function(){
+      if(token !== coachToken) return;
+      audioCoach.classList.remove("is-speaking");
+      audioStatus.textContent = "Tap Repeat to retry audio";
+    };
+    window.speechSynthesis.speak(utterance);
+  }
+
   function speakCurrentCue(){
     if(state !== "incall" || !cueLines.length) return;
     if(coachAdvanceTimer){ clearTimeout(coachAdvanceTimer); coachAdvanceTimer = null; }
@@ -624,42 +686,23 @@
     audioProgress.textContent = (isExit ? "Exit line" : "Line " + (cueIndex + 1)) + " of " + cueLines.length;
     audioCueLive.textContent = "Audio prompt " + (cueIndex + 1) + " is playing.";
 
-    if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
-      audioStatus.textContent = "Audio coach unavailable";
-      return;
-    }
-
-    window.speechSynthesis.cancel();
     var token = ++coachToken;
-    var utterance = new SpeechSynthesisUtterance((isExit ? "Exit line. Say: " : "Say: ") + line);
-    var voice = getCoachVoice();
-    if(voice) utterance.voice = voice;
-    utterance.lang = voice ? voice.lang : "en-SG";
-    utterance.rate = 0.86;
-    utterance.pitch = 0.96;
-    utterance.volume = 0.82;
-    utterance.onstart = function(){
-      if(token !== coachToken) return;
-      audioCoach.classList.add("is-speaking");
-      audioStatus.textContent = isExit ? "Listen to your exit line" : "Listen, then repeat";
-    };
-    utterance.onend = function(){
-      if(token !== coachToken) return;
-      audioCoach.classList.remove("is-speaking");
-      audioStatus.textContent = isExit ? "Deliver the exit line" : "Your turn to repeat";
-      if(!isExit && state === "incall"){
-        coachAdvanceTimer = setTimeout(function(){
-          cueIndex += 1;
-          speakCurrentCue();
-        }, coachRepeatDelay(line));
-      }
-    };
-    utterance.onerror = function(){
-      if(token !== coachToken) return;
-      audioCoach.classList.remove("is-speaking");
-      audioStatus.textContent = "Tap Repeat to hear the prompt";
-    };
-    window.speechSynthesis.speak(utterance);
+    var fallbackStarted = false;
+    function useSpeechFallback(){
+      if(fallbackStarted || token !== coachToken) return;
+      fallbackStarted = true;
+      coachAudio.onerror = null;
+      speakWithBrowserVoice(line, isExit, token);
+    }
+    coachAudio.onplay = function(){ coachStarted(token, isExit); };
+    coachAudio.onended = function(){ coachFinished(token, isExit, line); };
+    coachAudio.onerror = useSpeechFallback;
+    coachAudio.src = coachAudioPath(current.scriptId, cueIndex + 1);
+    coachAudio.currentTime = 0;
+    var playAttempt = coachAudio.play();
+    if(playAttempt && typeof playAttempt.catch === "function"){
+      playAttempt.catch(useSpeechFallback);
+    }
   }
 
   function playNextCue(){
@@ -779,6 +822,7 @@
     ringingView.style.display = "flex";
     incallView.style.display = "none";
     callscreen.classList.add("is-active");
+    preloadCoachAudio(current.scriptId);
     startRingtone();
     acceptBtn.focus();
   }

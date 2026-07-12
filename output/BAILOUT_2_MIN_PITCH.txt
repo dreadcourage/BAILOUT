@@ -16,7 +16,7 @@ Then arm the system - or press the Escape key at any moment for an immediate inc
 
 The phone rings and vibrates like a real call. Once answered, BAILOUT's audio coach speaks each line into your ear, waits for you to repeat it, and advances automatically - including the final exit line. It also logs the mission, because apparently escaping a meeting now requires enterprise analytics.
 
-The whole MVP runs in one HTML file. No account, no installation, and no setup.
+The whole MVP runs as a static browser app. No account, no installation, and no setup.
 
 BAILOUT is useful enough to download, ridiculous enough to share, and simple enough to work live.
 
@@ -31,4 +31,4 @@ Who uses it?
 Students, workers, and anyone trapped in a meeting that should have been an email.
 
 Does it actually work?
-Yes. The submitted MVP is a standalone HTML file and works directly in a browser.
+Yes. The submitted MVP is a static browser app and works directly in a browser.

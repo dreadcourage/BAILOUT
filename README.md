@@ -16,11 +16,12 @@ BAILOUT is a Strategic Meeting Extraction System: a deliberately over-engineered
 
 ## Run the MVP
 
-Open `index.html` directly in any modern browser. The complete MVP is self-contained and requires no installation, account, server, or API key.
+Open `index.html` directly in any modern browser. The static MVP includes local audio prompts and requires no installation, account, server, or API key.
 
 ## Submission files
 
-- `index.html` - standalone application
+- `index.html` - static application entry point
+- `audio/` - prerecorded coaching prompts
 - `output/BAILOUT_Pitch_Deck.pptx` - five-slide pitch deck
 - `output/BAILOUT_2_MIN_PITCH.txt` - two-minute speaking script
 - `output/DEVPOST_COPY.txt` - submission copy
