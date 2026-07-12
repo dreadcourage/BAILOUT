@@ -1,34 +1,57 @@
 BAILOUT - 2 MINUTE PITCH
 
-Meetings have calendar invitations, agendas, and minutes. What they do not have is an eject button.
+[SLIDE 1 - OPEN]
 
-We have all been in the same situation: the agenda ended twenty minutes ago, everyone is repeating themselves, and leaving honestly somehow feels ruder than wasting another hour.
+Every meeting has three phases: the agenda, the recap, and the yapping.
 
-Fake-call apps already exist, but they only solve the sound. You still have to invent a caller, a believable reason, and an entire conversation while everyone is watching you.
+Somehow, the yapping has no end time.
+
+[SLIDE 2 - PROBLEM]
+
+At that point, you are not in a meeting anymore. You are being held hostage by a Google Calendar invite. If you leave, you look rude. If you stay, your entire afternoon is cooked.
+
+Fake-call apps already exist, but they only make your phone ring. Then they basically say, "Good luck, bestie."
+
+Now you have to invent a caller, an emergency, and a whole conversation while everyone watches you.
+
+[SLIDE 3 - SOLUTION]
 
 So we built BAILOUT: the Strategic Meeting Extraction System.
 
-Choose who is calling, choose an extraction scenario, and set a believable delay. BAILOUT calculates an extraction-confidence score and prepares a complete spoken coaching script.
+Choose a caller, choose an extraction scenario, and set a believable delay. BAILOUT checks your confidence score and prepares the entire spoken escape script.
 
-Then arm the system - or press the Escape key at any moment for an immediate incoming call.
+You can arm the timer, or press the Escape key at any moment for an immediate bailout.
 
-[PRESS ESC AND ANSWER THE CALL]
+[SLIDE 4 - LIVE DEMO]
 
-The phone rings and vibrates like a real call. Once answered, BAILOUT's audio coach speaks each line into your ear, waits for you to repeat it, and advances automatically - including the final exit line. It also logs the mission, because apparently escaping a meeting now requires enterprise analytics.
+[PRESS ESC. PAUSE. ANSWER THE CALL.]
 
-The whole MVP runs as a static browser app. No account, no installation, and no setup.
+Now the phone rings and vibrates like a real call. Once I answer, the audio coach tells me exactly what to say, one line at a time. I just repeat it without staring at my screen like an NPC reading dialogue.
 
-BAILOUT is useful enough to download, ridiculous enough to share, and simple enough to work live.
+It even logs the mission, because if we are going to lie, we are going to lie with enterprise analytics.
 
-BAILOUT. Finally, the Escape key does what it says.
+[SLIDE 5 - CLOSE]
+
+The whole MVP runs locally in a browser. No account, no install, no server, and no API key. Just one keypress and twenty prerecorded prompts.
+
+BAILOUT is stupid enough for Dum, Duber and Dumber, useful enough to keep, and simple enough to work live.
+
+BAILOUT. Finally, the Escape key actually lets you escape.
+
 
 FAST Q&A
 
-What makes it different?
-It generates the entire believable exit flow: caller, scenario, timing, confidence score, ringtone, audio coaching, and mission log.
+What makes BAILOUT different from other fake-call apps?
+They create a ring. BAILOUT creates the complete exit: caller, scenario, timing, confidence score, realistic call, hands-free audio coaching, and mission log.
 
-Who uses it?
+Where is the AI?
+For the MVP, we focused on making the core escape loop reliable with curated scenarios and local audio. The next step is AI-personalized callers, excuses, and follow-up lines.
+
+Who would use this?
 Students, workers, and anyone trapped in a meeting that should have been an email.
 
+Is this just lying?
+We prefer "automated boundary-setting with plausible deniability."
+
 Does it actually work?
-Yes. The submitted MVP is a static browser app and works directly in a browser.
+Yes. It is a static browser app, and the submitted version works directly from the included HTML file.
