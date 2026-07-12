@@ -1,0 +1,34 @@
+BAILOUT - 2 MINUTE PITCH
+
+Meetings have calendar invitations, agendas, and minutes. What they do not have is an eject button.
+
+We have all been in the same situation: the agenda ended twenty minutes ago, everyone is repeating themselves, and leaving honestly somehow feels ruder than wasting another hour.
+
+Fake-call apps already exist, but they only solve the sound. You still have to invent a caller, a believable reason, and an entire conversation while everyone is watching you.
+
+So we built BAILOUT: the Strategic Meeting Extraction System.
+
+Choose who is calling, choose an extraction scenario, and set a believable delay. BAILOUT calculates an extraction-confidence score and prepares a complete cue-card script.
+
+Then arm the system - or press the Escape key at any moment for an immediate incoming call.
+
+[PRESS ESC AND ANSWER THE CALL]
+
+The phone rings and vibrates like a real call. Once answered, BAILOUT gives you each line to say, including the final exit line. It also logs the mission, because apparently escaping a meeting now requires enterprise analytics.
+
+The whole MVP runs in one HTML file. No account, no installation, and no setup.
+
+BAILOUT is useful enough to download, ridiculous enough to share, and simple enough to work live.
+
+BAILOUT. Finally, the Escape key does what it says.
+
+FAST Q&A
+
+What makes it different?
+It generates the entire believable exit flow: caller, scenario, timing, confidence score, ringtone, cue cards, and mission log.
+
+Who uses it?
+Students, workers, and anyone trapped in a meeting that should have been an email.
+
+Does it actually work?
+Yes. The submitted MVP is a standalone HTML file and works directly in a browser.
