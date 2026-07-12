@@ -5,13 +5,13 @@ TAGLINE
 Finally, the Escape key does what it says.
 
 SHORT DESCRIPTION
-BAILOUT is a strategic meeting extraction system that generates a believable incoming call, scores the excuse, and provides a live cue-card script so users can escape bad meetings with one press of the Escape key.
+BAILOUT is a strategic meeting extraction system that generates a believable incoming call, scores the excuse, and speaks a hands-free audio script so users can escape bad meetings with one press of the Escape key.
 
 WHAT IT DOES
-Users select a caller identity, extraction scenario, and delay. BAILOUT calculates an extraction-confidence score and arms a realistic incoming call with ringtone, vibration, conversation cues, an exit line, and a mission log. Pressing Esc triggers an immediate panic extraction at any time.
+Users select a caller identity, extraction scenario, and delay. BAILOUT calculates an extraction-confidence score and arms a realistic incoming call with ringtone, vibration, automatic audio coaching, an exit line, and a mission log. Pressing Esc triggers an immediate panic extraction at any time.
 
 HOW WE BUILT IT
-The MVP is a self-contained HTML, CSS, and JavaScript application. It uses the Web Audio API for the ringtone, the Vibration API on supported devices, keyboard events for the Esc panic trigger, and responsive browser UI for the call experience.
+The MVP is a self-contained HTML, CSS, and JavaScript application. It uses the Web Audio API for the ringtone, the Web Speech API for spoken prompts, the Vibration API on supported devices, keyboard events for the Esc panic trigger, and responsive browser UI for the call experience.
 
 WHY IT FITS THE THEME
 It is an absurdly over-engineered solution to an extremely relatable problem. It is stupid enough to be funny, but usable enough that people would genuinely keep it bookmarked.

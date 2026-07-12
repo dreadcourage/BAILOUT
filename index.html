@@ -213,14 +213,26 @@
   .callscreen .cs-sub{ margin-top:0.6rem; font-size:1rem; opacity:0.6; letter-spacing:0.02em; }
   .callscreen .cs-mid{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; max-width:420px; }
 
-  .cue-card{
+  .audio-coach{
+    width:100%; min-height:210px; padding:1.5rem 1.2rem;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem;
     background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14);
-    border-radius:14px; padding:1.1rem 1.3rem; width:100%; text-align:center; backdrop-filter:blur(6px);
+    border-radius:14px; text-align:center; cursor:pointer; color:#f2f4f8;
   }
-  .cue-card .cue-label{ font-size:0.66rem; text-transform:uppercase; letter-spacing:0.16em; opacity:0.55; margin-bottom:0.5rem; }
-  .cue-card .cue-line{ font-size:1.2rem; font-weight:500; text-wrap:balance; }
-  .cue-card .cue-hint{ margin-top:0.7rem; font-size:0.72rem; opacity:0.45; }
-  .cue-card.is-exit .cue-line{ color:#ffd479; }
+  .audio-wave{ height:68px; display:flex; align-items:center; justify-content:center; gap:7px; }
+  .audio-wave span{
+    width:6px; height:18px; border-radius:4px; background:#34c759;
+    transform-origin:center; opacity:0.52;
+  }
+  .audio-coach.is-speaking .audio-wave span{ animation:coach-wave 0.72s ease-in-out infinite alternate; opacity:1; }
+  .audio-coach.is-speaking .audio-wave span:nth-child(2){ animation-delay:0.12s; }
+  .audio-coach.is-speaking .audio-wave span:nth-child(3){ animation-delay:0.24s; }
+  .audio-coach.is-speaking .audio-wave span:nth-child(4){ animation-delay:0.36s; }
+  .audio-coach.is-speaking .audio-wave span:nth-child(5){ animation-delay:0.48s; }
+  @keyframes coach-wave{ from{ transform:scaleY(0.7); } to{ transform:scaleY(3.1); } }
+  .audio-status{ font-size:1.15rem; font-weight:600; }
+  .audio-progress{ font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; opacity:0.52; }
+  .audio-hint{ font-size:0.76rem; opacity:0.5; }
 
   .ring-actions{ display:flex; align-items:center; justify-content:center; gap:5rem; width:100%; padding-bottom:1rem; }
   .ring-col{ display:flex; flex-direction:column; align-items:center; gap:0.6rem; }
@@ -236,13 +248,16 @@
     position:absolute; inset:-8px; border-radius:50%; border:2px solid #34c759; pointer-events:none;
   }
 
-  .incall-actions{ display:flex; flex-direction:column; align-items:center; gap:1.6rem; width:100%; padding-bottom:1rem; }
-  .icon-row{ display:flex; gap:2.4rem; }
-  .icon-btn{
-    width:56px; height:56px; border-radius:50%; border:1px solid rgba(255,255,255,0.22);
-    background:rgba(255,255,255,0.06); color:#f2f4f8; font-size:0.62rem; letter-spacing:0.04em;
-    display:flex; align-items:center; justify-content:center; text-transform:uppercase; cursor:default;
+  .incall-actions{ display:flex; flex-direction:column; align-items:center; gap:1.35rem; width:100%; padding-bottom:1rem; }
+  .coach-controls{ display:flex; gap:1.2rem; }
+  .coach-btn{
+    width:78px; min-height:68px; border-radius:12px; border:1px solid rgba(255,255,255,0.22);
+    background:rgba(255,255,255,0.07); color:#f2f4f8; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.25rem;
   }
+  .coach-btn:hover{ background:rgba(255,255,255,0.13); }
+  .coach-btn .coach-symbol{ font-size:1.45rem; line-height:1; }
+  .coach-btn .coach-label{ font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em; opacity:0.72; }
   .end-btn{
     width:64px; height:64px; border-radius:50%; background:#ff453a; border:none; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
@@ -377,17 +392,22 @@
   </div>
 
   <div class="cs-mid" id="incallView" style="display:none;">
-    <div class="cue-card" id="cueCard">
-      <div class="cue-label">Cue card</div>
-      <div class="cue-line" id="cueLine">—</div>
-      <div class="cue-hint">Tap the card to advance</div>
-    </div>
+    <button class="audio-coach" id="audioCoach" type="button" aria-label="Repeat the current audio prompt">
+      <span class="audio-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+      <span class="audio-status" id="audioStatus">Audio coach ready</span>
+      <span class="audio-progress" id="audioProgress">Line 1 of 4</span>
+      <span class="audio-hint">Listen, repeat, then wait for the next prompt</span>
+    </button>
+    <div class="sr-only" id="audioCueLive" aria-live="polite"></div>
     <div class="incall-actions" style="margin-top:2.2rem;">
       <div class="call-elapsed" id="callElapsed">00:00</div>
-      <div class="icon-row">
-        <div class="icon-btn">Mute</div>
-        <div class="icon-btn">Keypad</div>
-        <div class="icon-btn">Speaker</div>
+      <div class="coach-controls">
+        <button class="coach-btn" id="repeatCueBtn" type="button" aria-label="Repeat audio prompt">
+          <span class="coach-symbol" aria-hidden="true">↻</span><span class="coach-label">Repeat</span>
+        </button>
+        <button class="coach-btn" id="nextCueBtn" type="button" aria-label="Play next audio prompt">
+          <span class="coach-symbol" aria-hidden="true">›</span><span class="coach-label">Next</span>
+        </button>
       </div>
       <button class="end-btn" id="endBtn" type="button" aria-label="End call">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21 15.5c-1.3 0-2.6-.2-3.8-.6a1 1 0 0 0-1 .2l-1.7 1.7a15.1 15.1 0 0 1-6.6-6.6l1.7-1.7c.3-.3.4-.7.2-1A11.4 11.4 0 0 1 9 3.9 1 1 0 0 0 8 3H4.5A1.5 1.5 0 0 0 3 4.5C3 13.6 10.4 21 19.5 21a1.5 1.5 0 0 0 1.5-1.5V16.5c0-.5-.4-1-1-1z" fill="#fff"/></svg>
@@ -509,8 +529,12 @@
   var acceptBtn = document.getElementById("acceptBtn");
   var declineBtn = document.getElementById("declineBtn");
   var endBtn = document.getElementById("endBtn");
-  var cueCard = document.getElementById("cueCard");
-  var cueLine = document.getElementById("cueLine");
+  var audioCoach = document.getElementById("audioCoach");
+  var audioStatus = document.getElementById("audioStatus");
+  var audioProgress = document.getElementById("audioProgress");
+  var audioCueLive = document.getElementById("audioCueLive");
+  var repeatCueBtn = document.getElementById("repeatCueBtn");
+  var nextCueBtn = document.getElementById("nextCueBtn");
   var callElapsed = document.getElementById("callElapsed");
   var toastEl = document.getElementById("toast");
 
@@ -519,7 +543,7 @@
   var armTimer = null, armRemaining = 0;
   var ringSchedule = null, vibrateInterval = null;
   var callStart = null, callTimerInterval = null;
-  var cueIndex = 0, cueLines = [];
+  var cueIndex = 0, cueLines = [], coachAdvanceTimer = null, coachToken = 0;
   var current = null; // { callerId, callerLabel, sub, scriptId, confidence }
   var audioCtx = null;
   var log = [];
@@ -571,6 +595,76 @@
     if(ringSchedule){ clearTimeout(ringSchedule); ringSchedule = null; }
     if(vibrateInterval){ clearInterval(vibrateInterval); vibrateInterval = null; }
     if(navigator.vibrate){ try{ navigator.vibrate(0); }catch(e){} }
+  }
+
+  function stopAudioCoach(){
+    coachToken += 1;
+    if(coachAdvanceTimer){ clearTimeout(coachAdvanceTimer); coachAdvanceTimer = null; }
+    if("speechSynthesis" in window){ window.speechSynthesis.cancel(); }
+    audioCoach.classList.remove("is-speaking");
+  }
+
+  function getCoachVoice(){
+    if(!("speechSynthesis" in window)) return null;
+    var voices = window.speechSynthesis.getVoices();
+    return voices.find(function(voice){ return /^en-SG/i.test(voice.lang); }) ||
+      voices.find(function(voice){ return /^en-/i.test(voice.lang); }) || voices[0] || null;
+  }
+
+  function coachRepeatDelay(line){
+    var words = line.trim().split(/\s+/).length;
+    return Math.max(4800, Math.min(8500, words * 520 + 2200));
+  }
+
+  function speakCurrentCue(){
+    if(state !== "incall" || !cueLines.length) return;
+    if(coachAdvanceTimer){ clearTimeout(coachAdvanceTimer); coachAdvanceTimer = null; }
+    var isExit = cueIndex === cueLines.length - 1;
+    var line = cueLines[cueIndex];
+    audioProgress.textContent = (isExit ? "Exit line" : "Line " + (cueIndex + 1)) + " of " + cueLines.length;
+    audioCueLive.textContent = "Audio prompt " + (cueIndex + 1) + " is playing.";
+
+    if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
+      audioStatus.textContent = "Audio coach unavailable";
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    var token = ++coachToken;
+    var utterance = new SpeechSynthesisUtterance((isExit ? "Exit line. Say: " : "Say: ") + line);
+    var voice = getCoachVoice();
+    if(voice) utterance.voice = voice;
+    utterance.lang = voice ? voice.lang : "en-SG";
+    utterance.rate = 0.86;
+    utterance.pitch = 0.96;
+    utterance.volume = 0.82;
+    utterance.onstart = function(){
+      if(token !== coachToken) return;
+      audioCoach.classList.add("is-speaking");
+      audioStatus.textContent = isExit ? "Listen to your exit line" : "Listen, then repeat";
+    };
+    utterance.onend = function(){
+      if(token !== coachToken) return;
+      audioCoach.classList.remove("is-speaking");
+      audioStatus.textContent = isExit ? "Deliver the exit line" : "Your turn to repeat";
+      if(!isExit && state === "incall"){
+        coachAdvanceTimer = setTimeout(function(){
+          cueIndex += 1;
+          speakCurrentCue();
+        }, coachRepeatDelay(line));
+      }
+    };
+    utterance.onerror = function(){
+      if(token !== coachToken) return;
+      audioCoach.classList.remove("is-speaking");
+      audioStatus.textContent = "Tap Repeat to hear the prompt";
+    };
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function playNextCue(){
+    if(cueIndex < cueLines.length - 1){ cueIndex += 1; }
+    speakCurrentCue();
   }
 
   function showToast(msg){
@@ -677,6 +771,7 @@
 
   // ---------- ringing / call ----------
   function triggerRinging(){
+    stopAudioCoach();
     state = "ringing";
     setIdleUI();
     csCaller.textContent = current.callerLabel;
@@ -695,7 +790,9 @@
     incallView.style.display = "flex";
     cueIndex = 0;
     cueLines = SCRIPTS[current.scriptId].lines.concat([SCRIPTS[current.scriptId].exit]);
-    renderCue();
+    audioStatus.textContent = "Preparing audio coach";
+    audioProgress.textContent = "Line 1 of " + cueLines.length;
+    speakCurrentCue();
     callStart = Date.now();
     callElapsed.textContent = "00:00";
     callTimerInterval = setInterval(function(){
@@ -705,16 +802,9 @@
     endBtn.focus();
   }
 
-  function renderCue(){
-    var isExit = cueIndex === cueLines.length - 1;
-    cueCard.classList.toggle("is-exit", isExit);
-    cueCard.querySelector(".cue-label").textContent = isExit ? "Exit line" : "Cue card";
-    cueLine.textContent = cueLines[cueIndex];
-    cueCard.querySelector(".cue-hint").textContent = isExit ? "Deliver this, then end the call." : "Tap the card to advance";
-  }
-
   function declineCall(){
     stopRingtone();
+    stopAudioCoach();
     log.unshift({ time:new Date(), caller:current.callerLabel, scenario:SCRIPTS[current.scriptId].label, aborted:true });
     renderLog();
     closeOverlay();
@@ -722,6 +812,7 @@
   }
 
   function endCall(){
+    stopAudioCoach();
     var duration = Math.floor((Date.now() - callStart)/1000);
     if(callTimerInterval){ clearInterval(callTimerInterval); callTimerInterval = null; }
     log.unshift({ time:new Date(), caller:current.callerLabel, scenario:SCRIPTS[current.scriptId].label, duration:duration, confidence:current.confidence, aborted:false });
@@ -731,6 +822,7 @@
   }
 
   function closeOverlay(){
+    stopAudioCoach();
     callscreen.classList.remove("is-active");
     state = "idle";
     current = null;
@@ -757,9 +849,9 @@
   acceptBtn.addEventListener("click", answerCall);
   declineBtn.addEventListener("click", declineCall);
   endBtn.addEventListener("click", endCall);
-  cueCard.addEventListener("click", function(){
-    if(cueIndex < cueLines.length - 1){ cueIndex += 1; renderCue(); }
-  });
+  audioCoach.addEventListener("click", speakCurrentCue);
+  repeatCueBtn.addEventListener("click", speakCurrentCue);
+  nextCueBtn.addEventListener("click", playNextCue);
 
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape"){

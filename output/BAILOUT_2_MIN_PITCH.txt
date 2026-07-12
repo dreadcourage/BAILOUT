@@ -14,7 +14,7 @@ Then arm the system - or press the Escape key at any moment for an immediate inc
 
 [PRESS ESC AND ANSWER THE CALL]
 
-The phone rings and vibrates like a real call. Once answered, BAILOUT gives you each line to say, including the final exit line. It also logs the mission, because apparently escaping a meeting now requires enterprise analytics.
+The phone rings and vibrates like a real call. Once answered, BAILOUT's audio coach speaks each line into your ear, waits for you to repeat it, and advances automatically - including the final exit line. It also logs the mission, because apparently escaping a meeting now requires enterprise analytics.
 
 The whole MVP runs in one HTML file. No account, no installation, and no setup.
 
@@ -25,7 +25,7 @@ BAILOUT. Finally, the Escape key does what it says.
 FAST Q&A
 
 What makes it different?
-It generates the entire believable exit flow: caller, scenario, timing, confidence score, ringtone, cue cards, and mission log.
+It generates the entire believable exit flow: caller, scenario, timing, confidence score, ringtone, audio coaching, and mission log.
 
 Who uses it?
 Students, workers, and anyone trapped in a meeting that should have been an email.

@@ -11,7 +11,7 @@ BAILOUT is a Strategic Meeting Extraction System: a deliberately over-engineered
 - Select a believable caller and extraction scenario.
 - Choose a delayed trigger or press `Esc` for an immediate panic call.
 - Ring and vibrate like a real incoming call.
-- Display live conversation cue cards and a final exit line.
+- Speak each conversation cue through a hands-free audio coach, including the final exit line.
 - Calculate an extraction-confidence score and keep a mission log.
 
 ## Run the MVP
