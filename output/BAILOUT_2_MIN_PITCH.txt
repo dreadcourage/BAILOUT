@@ -8,7 +8,7 @@ Fake-call apps already exist, but they only solve the sound. You still have to i
 
 So we built BAILOUT: the Strategic Meeting Extraction System.
 
-Choose who is calling, choose an extraction scenario, and set a believable delay. BAILOUT calculates an extraction-confidence score and prepares a complete cue-card script.
+Choose who is calling, choose an extraction scenario, and set a believable delay. BAILOUT calculates an extraction-confidence score and prepares a complete spoken coaching script.
 
 Then arm the system - or press the Escape key at any moment for an immediate incoming call.
 
